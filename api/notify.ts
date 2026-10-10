@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { getTicketAuthor } from './storage';
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '8628252821:AAHeyGTQ9sH2B4bUPXgxlN-xbGV8f_6g9Zc';
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || '8010010144';
@@ -23,10 +23,10 @@ export default async function handler(req: any, res: any) {
       const { ticketId, guestName, date, time: evtTime, location, food, drinks, conditions } = payload || {};
       if (ticketId) {
         try {
-          const authorChatId = await kv.get(`ticket_author_${ticketId}`);
+          const authorChatId = await getTicketAuthor(ticketId);
           if (authorChatId) {
             const authorText = `🎉 Твой билет подписан!\n\n👤 Гость: ${guestName || 'Не указан'}\n📅 Когда: ${date || 'Не указано'} в ${evtTime || 'Не указано'}\n📍 Локация: ${location || 'Не указана'}\n🍕 Еда: ${food || 'Не указана'}\n🥤 Напитки: ${drinks || 'Не указано'}\n📜 Условия: ${conditions || 'Не указаны'}\n\n✍️ Личная подпись успешно поставлена на билете! Пора собираться на встречу 🥂`;
-            await sendMessage(authorChatId as string | number, authorText);
+            await sendMessage(authorChatId, authorText);
           }
         } catch (e) {
           console.error("Error fetching author chat id:", e);

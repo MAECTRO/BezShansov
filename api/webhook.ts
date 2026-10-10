@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { setTicketAuthor } from './storage';
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '8628252821:AAHeyGTQ9sH2B4bUPXgxlN-xbGV8f_6g9Zc';
 
@@ -14,11 +14,11 @@ export default async function handler(req: any, res: any) {
       if (text.startsWith('/start ticket_')) {
         const ticketId = text.replace('/start ticket_', '').trim();
         if (ticketId && chatId) {
-          await kv.set(`ticket_author_${ticketId}`, chatId);
+          await setTicketAuthor(ticketId, chatId);
           await sendMessage(chatId, 'Отлично! Я напишу сюда в личку, как только твою ссылку откроют и подпишут 💌');
         }
       } else if (text === '/start') {
-        await sendMessage(chatId, 'Привет! Я бот сервиса «БезШансов» 💌\\n\\nСоздавай интерактивные свидания на сайте и нажимай «Уведомить в Telegram» — я пришлю тебе сообщение, как только билет подпишут!');
+        await sendMessage(chatId, 'Привет! Я бот сервиса «БезШансов» 💌\n\nСоздавай интерактивные свидания на сайте и нажимай «Уведомить в Telegram» — я пришлю тебе сообщение, как только билет подпишут!');
       }
     }
     return res.status(200).send('OK');
