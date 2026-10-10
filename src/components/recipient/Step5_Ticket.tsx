@@ -38,6 +38,7 @@ import {
 import { APP_CONFIG } from '../../config/appConfig';
 import { TRANSLATIONS } from '../../locales/translations';
 import { notifyAuthorOnRSVP } from '../../services/telegramService';
+import { sendNotification } from '../../services/notifyApi';
 
 // ==========================================
 // 🎟️ ШАГ 5: ФИНАЛЬНЫЙ БИЛЕТ-АРТЕФАКТ
@@ -158,23 +159,16 @@ export const Step5_Ticket: React.FC<Step5TicketProps> = ({
     }
 
     // Уведомление на бекенд (Админу и Автору)
-    fetch('/api/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'TICKET_SIGNED',
-        payload: {
-          ticketId: config.id,
-          guestName: config.crushName || '',
-          date: ticketData.date,
-          time: ticketData.time,
-          location: ticketData.location,
-          food: ticketData.treat,
-          drinks: ticketData.drink,
-          conditions: rules.length > 0 ? rules.join(', ') : 'Стандартные',
-        }
-      })
-    }).catch(console.error);
+    sendNotification('TICKET_SIGNED', {
+      ticketId: config.id,
+      guestName: config.crushName || '',
+      date: ticketData.date,
+      time: ticketData.time,
+      location: ticketData.location,
+      food: ticketData.treat,
+      drinks: ticketData.drink,
+      conditions: rules.length > 0 ? rules.join(', ') : 'Стандартные',
+    });
 
     setShowToast(true);
     setTimeout(() => {

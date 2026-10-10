@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Send, CheckCircle2, MessageSquareHeart } from 'lucide-react';
 import type { AppLanguage } from '../../types/ticket';
 import { sound } from '../../utils/audio';
+import { sendNotification } from '../../services/notifyApi';
 
 interface FeedbackFormProps {
   language?: AppLanguage;
@@ -22,16 +23,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ language = 'ru' }) =
     sound.coin();
 
     try {
-      await fetch(`/api/notify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'FEEDBACK',
-          payload: { text: trimmed },
-        }),
-      });
+      await sendNotification('FEEDBACK', { text: trimmed });
 
       setMessageText('');
       setShowToast(true);

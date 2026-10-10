@@ -41,6 +41,7 @@ import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { sound } from '../../utils/audio';
 import { generateInvitationUrl } from '../../utils/share';
+import { sendNotification } from '../../services/notifyApi';
 import { PoetryStudio } from './PoetryStudio';
 import { LiveCounterBadge } from './LiveCounterBadge';
 import { FeedbackForm } from './FeedbackForm';
@@ -389,11 +390,7 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
     setShareUrl(url);
 
     // Уведомление о создании билета
-    fetch('/api/notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'TICKET_CREATED', payload: { ticketId: config.id } })
-    }).catch(console.error);
+    sendNotification('TICKET_CREATED', { ticketId: config.id });
 
     // 2. Отправляем GET-запрос на увеличение: https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1
     fetch('https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1').catch((err) => {
