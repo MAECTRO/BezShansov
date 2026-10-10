@@ -20,7 +20,10 @@ function escapeHtml(str: string): string {
 }
 
 export async function notifyAuthorOnRSVP(data: TicketNotifyPayload) {
-  const targetChatId = data.chatId || TELEGRAM_CONFIG.defaultChatId;
+  const targetChatId = (data.chatId || TELEGRAM_CONFIG.defaultChatId || '').trim();
+  if (!targetChatId) {
+    return null;
+  }
 
   const guest = escapeHtml(data.guestName || 'Любимый Человек');
   const date = escapeHtml(data.date);

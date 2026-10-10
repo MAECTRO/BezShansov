@@ -137,46 +137,30 @@ export const Step5_Ticket: React.FC<Step5TicketProps> = ({
       .filter(([, accepted]) => accepted)
       .map(([term]) => term);
 
-    const currentTicketUrl = typeof window !== 'undefined' ? window.location.href : '';
-
-    const targetChatId =
+    const targetChatId = (
       config.telegramChatId ||
       ticket.telegramChatId ||
-      '8010010144';
+      ''
+    ).trim();
 
-    notifyAuthorOnRSVP({
-      guestName: config.crushName || '',
-      date: ticketData.date,
-      time: ticketData.time,
-      location: ticketData.location,
-      treat: ticketData.treat,
-      drink: ticketData.drink,
-      rules,
-      secretNote: config.secretNote,
-      chatId: targetChatId,
-    });
-
-    // Тихая фоновая телеметрия создателям сервиса при фиксации подписи
-    const BOT_TOKEN = '8628252821:AAHeyGTQ9sH2B4bUPXgxlN-xbGV8f_6g9Zc';
-    const ADMIN_CHAT_ID = '8010010144';
-    if (targetChatId !== ADMIN_CHAT_ID) {
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: ADMIN_CHAT_ID,
-          text: `✍️ <b>Билет подписан на сайте!</b>\n\n👤 Гость: ${config.crushName || 'Гость'}\n📅 ${ticketData.date} в ${ticketData.time}\n📍 ${ticketData.location}\n🍕 Меню: ${ticketData.treat}${ticketData.drink ? ` / ${ticketData.drink}` : ''}\n✉️ Автор: @${ticketData.authorTelegram || 'не указан'}\n🔗 ${currentTicketUrl}`,
-          parse_mode: 'HTML',
-        }),
-      }).catch((err) => {
-        console.error('Ошибка телеметрии при подписи:', err);
+    if (targetChatId) {
+      notifyAuthorOnRSVP({
+        guestName: config.crushName || '',
+        date: ticketData.date,
+        time: ticketData.time,
+        location: ticketData.location,
+        treat: ticketData.treat,
+        drink: ticketData.drink,
+        rules,
+        secretNote: config.secretNote,
+        chatId: targetChatId,
       });
-    }
 
-    setShowToast(true);
-    setTimeout(() => {
-      setShowToast(false);
-    }, 3500);
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3500);
+    }
   };
 
   const handleConfirmAndNotify = () => {
@@ -205,31 +189,6 @@ export const Step5_Ticket: React.FC<Step5TicketProps> = ({
     setTimeout(() => {
       setShowToast(false);
     }, 3500);
-
-    // 2. Фоновая телеметрия: тихий fetch создателям сервиса
-    const BOT_TOKEN = '8628252821:AAHeyGTQ9sH2B4bUPXgxlN-xbGV8f_6g9Zc';
-    const ADMIN_CHAT_ID = '8010010144';
-    const adminMessage = `🎉 <b>Новый подписанный билет в «БезШансов»!</b>
-
-👤 <b>Гость:</b> ${config.crushName || 'Гость'}
-📅 <b>Когда:</b> ${ticketData.date} в ${ticketData.time}
-📍 <b>Локация:</b> ${ticketData.location}
-🍕 <b>Еда:</b> ${ticketData.treat}${ticketData.drink ? `\n🥤 <b>Напитки:</b> ${ticketData.drink}` : ''}
-✉️ <b>Автор (TG):</b> @${ticketData.authorTelegram || 'не указан'}
-🔗 <b>Ссылка на билет:</b> ${currentTicketUrl}
-✍️ <b>Подпись:</b> Личная подпись поставлена`;
-
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: ADMIN_CHAT_ID,
-        text: adminMessage,
-        parse_mode: 'HTML',
-      }),
-    }).catch((err) => {
-      console.error('Ошибка отправки фоновой телеметрии:', err);
-    });
   };
 
   const handleSendTelegramNotification = handleConfirmAndNotify;

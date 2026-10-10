@@ -95,43 +95,39 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
   const [showQRModal, setShowQRModal] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
 
-  // Живой счётчик генераций: CounterAPI + база 5 (отображаем count + 5)
-  const BASE_OFFSET = 5;
+  // Живой счётчик генераций: CountAPI + стартовая база 124
+  const BASE_OFFSET = 124;
   const [createdCount, setCreatedCount] = useState<number>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bezshansov_counter_v5');
+      const saved = localStorage.getItem('bezshansov_counter_v6');
       if (saved) {
         const parsed = parseInt(saved, 10);
         if (!isNaN(parsed) && parsed >= 0) return parsed;
       }
     }
-    return 0; // база 0 -> при отображении (0 + 5) будет дефолтное 5
+    return BASE_OFFSET;
   });
   const [isBumping, setIsBumping] = useState(false);
 
-  // 1. При загрузке страницы: GET https://api.counterapi.dev/v1/bezshansov_invites/creations
+  // 1. При загрузке страницы: GET https://countapi.mileshilliard.com/api/v1/get/bezshansov_invites_v1
   useEffect(() => {
     let isMounted = true;
     const fetchCounter = async () => {
       try {
-        const res = await fetch('https://api.counterapi.dev/v1/bezshansov_invites/creations');
+        const res = await fetch('https://countapi.mileshilliard.com/api/v1/get/bezshansov_invites_v1');
         if (res.ok) {
           const data = await res.json();
-          const countVal =
-            typeof data?.count === 'number'
-              ? data.count
-              : typeof data?.value === 'number'
-              ? data.value
-              : null;
+          const countVal = typeof data?.value === 'number' ? data.value : null;
           if (countVal !== null && isMounted) {
-            setCreatedCount(countVal);
+            const finalVal = countVal + BASE_OFFSET;
+            setCreatedCount(finalVal);
             if (typeof window !== 'undefined') {
-              localStorage.setItem('bezshansov_counter_v5', String(countVal));
+              localStorage.setItem('bezshansov_counter_v6', String(finalVal));
             }
           }
         }
       } catch (err) {
-        console.warn('CounterAPI fetch error:', err);
+        console.warn('CountAPI fetch error:', err);
       }
     };
 
@@ -405,16 +401,16 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
     });
     setShareUrl(url);
 
-    // 2. Отправляем GET-запрос на увеличение: https://api.counterapi.dev/v1/bezshansov_invites/creations/up
-    fetch('https://api.counterapi.dev/v1/bezshansov_invites/creations/up').catch((err) => {
-      console.warn('CounterAPI increment error:', err);
+    // 2. Отправляем GET-запрос на увеличение: https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1
+    fetch('https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1').catch((err) => {
+      console.warn('CountAPI increment error:', err);
     });
 
     // Локально сразу прибавляем +1 к цифре на экране
     const nextCount = createdCount + 1;
     setCreatedCount(nextCount);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('bezshansov_counter_v5', String(nextCount));
+      localStorage.setItem('bezshansov_counter_v6', String(nextCount));
     }
     setIsBumping(true);
     setTimeout(() => setIsBumping(false), 500);
