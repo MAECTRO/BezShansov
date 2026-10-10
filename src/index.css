@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  html, body {
+    background-color: #0C0A09;
+    color: #F5F5F4;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: manipulation;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Разрешаем выделение текста только в полях ввода */
+  input, textarea {
+    user-select: text;
+  }
+}
+
+@layer utilities {
+  /* Золотое тиснение по ТЗ */
+  .gold-foil {
+    background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25));
+  }
+
+  /* Серебряно-стальное тиснение для повестки */
+  .silver-foil {
+    background: linear-gradient(135deg, #F1F5F9 0%, #94A3B8 50%, #475569 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+  }
+
+  /* Голографическая переливающаяся полоса */
+  .holographic-bar {
+    background: linear-gradient(
+      90deg,
+      rgba(99, 102, 241, 0.35) 0%,
+      rgba(236, 72, 153, 0.45) 25%,
+      rgba(251, 191, 36, 0.5) 50%,
+      rgba(52, 211, 153, 0.45) 75%,
+      rgba(99, 102, 241, 0.35) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 4s ease-in-out infinite alternate;
+  }
+
+  /* Красивый скроллбар */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(12, 10, 9, 0.5);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(87, 83, 78, 0.4);
+    border-radius: 9999px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(245, 158, 11, 0.5);
+  }
+}
