@@ -17,8 +17,7 @@ import { RecipientFlow } from './components/recipient/RecipientFlow';
 // Маршрутизация по ?d= и Serverless State
 // ==========================================
 
-const DEFAULT_CONFIG: InvitationConfig = {
-  id: `tkt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+const DEFAULT_CONFIG: Omit<InvitationConfig, 'id'> & { id?: string } = {
   crushName: '',
   question: '',
   occasion: 'romance',
@@ -134,7 +133,7 @@ export const App: React.FC = () => {
         }
       }
     }
-    return translateConfig(DEFAULT_CONFIG, language);
+    return translateConfig({ ...DEFAULT_CONFIG, id: `tkt-${Date.now()}-${Math.floor(Math.random() * 10000)}` } as InvitationConfig, language);
   });
 
   // Переключение языка интерфейса (переводит все пресеты еды, напитков, локаций, оплаты и условий)
