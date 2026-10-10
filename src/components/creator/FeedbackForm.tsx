@@ -21,25 +21,15 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({ language = 'ru' }) =
     setIsSubmitting(true);
     sound.coin();
 
-    const BOT_TOKEN = '8628252821:AAHeyGTQ9sH2B4bUPXgxlN-xbGV8f_6g9Zc';
-    const CHAT_ID = '8010010144';
-
-    const textPayload =
-      '💌 <b>Новый отзыв / идея с сайта БезШансов!</b>\n\n«' +
-      trimmed +
-      '»\n\n🕒 ' +
-      new Date().toLocaleString('ru-RU');
-
     try {
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      await fetch(`/api/notify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: textPayload,
-          parse_mode: 'HTML',
+          type: 'FEEDBACK',
+          payload: { text: trimmed },
         }),
       });
 

@@ -155,12 +155,31 @@ export const Step5_Ticket: React.FC<Step5TicketProps> = ({
         secretNote: config.secretNote,
         chatId: targetChatId,
       });
-
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3500);
     }
+
+    // Уведомление на бекенд (Админу и Автору)
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'TICKET_SIGNED',
+        payload: {
+          ticketId: config.id,
+          guestName: config.crushName || '',
+          date: ticketData.date,
+          time: ticketData.time,
+          location: ticketData.location,
+          food: ticketData.treat,
+          drinks: ticketData.drink,
+          conditions: rules.length > 0 ? rules.join(', ') : 'Стандартные',
+        }
+      })
+    }).catch(console.error);
+
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3500);
   };
 
   const handleConfirmAndNotify = () => {

@@ -18,7 +18,7 @@ import { RecipientFlow } from './components/recipient/RecipientFlow';
 // ==========================================
 
 const DEFAULT_CONFIG: InvitationConfig = {
-  id: 'ticket-default',
+  id: `tkt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
   crushName: '',
   question: '',
   occasion: 'romance',
@@ -116,6 +116,7 @@ export const App: React.FC = () => {
           return translateConfig(
             {
               ...decoded,
+              id: decoded.id || `tkt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
               authorTelegram: cleanAuthor,
               creatorTelegram: cleanAuthor,
               locations,

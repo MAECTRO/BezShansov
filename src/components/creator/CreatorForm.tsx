@@ -401,6 +401,13 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
     });
     setShareUrl(url);
 
+    // Уведомление о создании билета
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'TICKET_CREATED', payload: { ticketId: config.id } })
+    }).catch(console.error);
+
     // 2. Отправляем GET-запрос на увеличение: https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1
     fetch('https://countapi.mileshilliard.com/api/v1/hit/bezshansov_invites_v1').catch((err) => {
       console.warn('CountAPI increment error:', err);
@@ -1183,6 +1190,18 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
             {/* QR-код */}
             <div className="p-4 bg-white rounded-2xl inline-block shadow-lg mx-auto">
               <QRCodeSVG value={shareUrl} size={180} />
+            </div>
+
+            {/* Кнопка уведомления */}
+            <div className="pt-2 pb-2">
+              <a
+                href={`https://t.me/bezshansov_me_bot?start=ticket_${config.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-[#2AABEE] text-white text-xs font-bold shadow-lg hover:bg-[#229ED9] transition-all"
+              >
+                🔔 Уведомить в Telegram, когда подпишут
+              </a>
             </div>
 
             {/* Поле со ссылкой и кнопка копирования */}
