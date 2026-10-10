@@ -385,7 +385,7 @@ export function translateConfig(config: InvitationConfig, targetLang: AppLanguag
     contractTerms:
       config.contractTerms && config.contractTerms.length > 0
         ? translateArray(config.contractTerms, targetLang)
-        : getDefaultContractTerms(config.occasion, targetLang),
+        : [],
   };
 }
 

@@ -4,7 +4,6 @@ import type { InvitationConfig, TicketData, AppLanguage } from '../../types/tick
 import {
   DEFAULT_DRINKS,
   DEFAULT_DRINKS_EN,
-  getDefaultContractTerms,
   translateItem,
   translateArray,
 } from '../../types/ticket';
@@ -82,7 +81,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
       contractTerms:
         config.contractTerms && config.contractTerms.length > 0
           ? translateArray(config.contractTerms, lang)
-          : getDefaultContractTerms(config.occasion, lang),
+          : [],
       language: lang,
     },
     response: {

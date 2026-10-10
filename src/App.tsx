@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import type { InvitationConfig, AppLanguage } from './types/ticket';
 import {
   DEFAULT_DRINKS,
-  DEFAULT_CONTRACT_TERMS_RU,
-  DEFAULT_CONTRACT_TERMS_EN,
   translateConfig,
   translateItem,
 } from './types/ticket';
@@ -50,7 +48,7 @@ const DEFAULT_CONFIG: Omit<InvitationConfig, 'id'> & { id?: string } = {
     'Битва у кассы',
     'Цу-е-фа',
   ],
-  contractTerms: [...DEFAULT_CONTRACT_TERMS_RU],
+  contractTerms: [],
   language: 'ru',
   createdAt: Date.now(),
 };
@@ -123,10 +121,7 @@ export const App: React.FC = () => {
               drinks,
               telegramChatId: chatIdParam || decoded.telegramChatId || '',
               language: targetLang,
-              contractTerms:
-                decoded.contractTerms && decoded.contractTerms.length > 0
-                  ? decoded.contractTerms
-                  : (targetLang === 'en' ? DEFAULT_CONTRACT_TERMS_EN : DEFAULT_CONTRACT_TERMS_RU),
+              contractTerms: decoded.contractTerms || [],
             },
             targetLang
           );

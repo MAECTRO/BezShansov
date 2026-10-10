@@ -78,7 +78,7 @@ export const Step5_Ticket: React.FC<Step5TicketProps> = ({
   // Динамические условия романтического контракта / пакта
   const presetTerms = getDefaultContractTerms(config.occasion, lang);
   const activeTerms =
-    config.contractTerms && config.contractTerms.length > 0
+    config.contractTerms !== undefined
       ? translateArray(config.contractTerms, lang)
       : presetTerms;
 

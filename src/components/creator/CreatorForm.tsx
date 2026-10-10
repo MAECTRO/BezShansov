@@ -35,14 +35,6 @@ import {
   DEFAULT_BRO_LOCATIONS_EN,
   DEFAULT_BRO_PAYMENT_RU,
   DEFAULT_BRO_PAYMENT_EN,
-  DEFAULT_CONTRACT_TERMS_RU,
-  DEFAULT_CONTRACT_TERMS_EN,
-  DEFAULT_CONTRACT_TERMS_BRO_RU,
-  DEFAULT_CONTRACT_TERMS_BRO_EN,
-  DEFAULT_CONTRACT_TERMS_GIRLS_RU,
-  DEFAULT_CONTRACT_TERMS_GIRLS_EN,
-  DEFAULT_CONTRACT_TERMS_PEACE_RU,
-  DEFAULT_CONTRACT_TERMS_PEACE_EN,
   getDefaultContractTerms,
 } from '../../types/ticket';
 import { Input } from '../ui/Input';
@@ -178,7 +170,7 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
       newDrinks = lang === 'en' ? [...DEFAULT_BRO_DRINKS_EN] : [...DEFAULT_BRO_DRINKS_RU];
       newLocations = lang === 'en' ? [...DEFAULT_BRO_LOCATIONS_EN] : [...DEFAULT_BRO_LOCATIONS_RU];
       newPayment = lang === 'en' ? [...DEFAULT_BRO_PAYMENT_EN] : [...DEFAULT_BRO_PAYMENT_RU];
-      newTerms = lang === 'en' ? [...DEFAULT_CONTRACT_TERMS_BRO_EN] : [...DEFAULT_CONTRACT_TERMS_BRO_RU];
+      newTerms = [];
       newArchetype = 'bro-pass';
       newSubpoenaClause =
         lang === 'en'
@@ -205,7 +197,7 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
         lang === 'en'
           ? ['Split 50/50', 'Birthday girl relaxes', 'I treat today', 'Dutch bill']
           : ['Каждая за себя', 'Именинница отдыхает', 'Сегодня я угощаю подругу', 'Скидываемся пополам'];
-      newTerms = lang === 'en' ? [...DEFAULT_CONTRACT_TERMS_GIRLS_EN] : [...DEFAULT_CONTRACT_TERMS_GIRLS_RU];
+      newTerms = [];
       newArchetype = 'girls-pass';
       newSubpoenaClause =
         lang === 'en'
@@ -232,7 +224,7 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
         lang === 'en'
           ? ['I pay (apology tab)', 'My treat 100%', 'Compromise split']
           : ['Я угощаю (заглаживаю вину)', 'Всё за мой счет 💳', 'Мирный компромисс'];
-      newTerms = lang === 'en' ? [...DEFAULT_CONTRACT_TERMS_PEACE_EN] : [...DEFAULT_CONTRACT_TERMS_PEACE_RU];
+      newTerms = [];
       newArchetype = 'subpoena';
       newSubpoenaClause =
         lang === 'en'
@@ -270,7 +262,7 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
         lang === 'en'
           ? ['Crush treats', 'Split (50/50)', 'Battle at counter', 'Rock-paper-scissors']
           : ['Краш угощает', 'Пополам (50/50)', 'Битва у кассы', 'Цу-е-фа'];
-      newTerms = lang === 'en' ? [...DEFAULT_CONTRACT_TERMS_EN] : [...DEFAULT_CONTRACT_TERMS_RU];
+      newTerms = [];
       newArchetype = 'boarding-pass';
       newSubpoenaClause =
         lang === 'en'
@@ -293,17 +285,13 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
   };
 
   // Обработчики романтического контракта
-  const activeContractTerms =
-    config.contractTerms && config.contractTerms.length > 0
-      ? config.contractTerms
-      : getDefaultContractTerms(config.occasion, lang);
+  const activeContractTerms = config.contractTerms || [];
 
   const presetContractTerms = getDefaultContractTerms(config.occasion, lang);
 
   const toggleContractTerm = (term: string) => {
     sound.click();
     if (activeContractTerms.includes(term)) {
-      if (activeContractTerms.length <= 1) return; // Не удаляем последнее условие
       updateField(
         'contractTerms',
         activeContractTerms.filter((t) => t !== term)
@@ -322,7 +310,6 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
   };
 
   const removeContractTerm = (termToRemove: string) => {
-    if (activeContractTerms.length <= 1) return;
     updateField(
       'contractTerms',
       activeContractTerms.filter((t) => t !== termToRemove)
