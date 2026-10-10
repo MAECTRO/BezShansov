@@ -500,11 +500,11 @@ export const CreatorForm: React.FC<CreatorFormProps> = ({
           {t.creator.headerSubtitle}
         </p>
 
-        {/* Живой счётчик созданных приглашений (CounterAPI: count + 120) */}
+        {/* Живой счётчик созданных приглашений */}
         <div className="pt-2.5">
           <LiveCounterBadge
             language={lang}
-            count={createdCount + BASE_OFFSET}
+            count={createdCount}
             isBumping={isBumping}
           />
         </div>
