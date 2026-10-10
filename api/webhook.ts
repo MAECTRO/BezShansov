@@ -7,13 +7,18 @@ export default async function handler(req: any, res: any) {
   
   try {
     const update = req.body;
-    if (update?.message?.text && update.message.text.startsWith('/start ticket_')) {
-      const ticketId = update.message.text.replace('/start ticket_', '').trim();
+    if (update?.message?.text) {
+      const text = update.message.text.trim();
       const chatId = update.message.chat.id;
-      
-      if (ticketId && chatId) {
-        await kv.set(`ticket_author_${ticketId}`, chatId);
-        await sendMessage(chatId, 'Отлично! Я напишу сюда в личку, как только твою ссылку откроют и подпишут 💌');
+
+      if (text.startsWith('/start ticket_')) {
+        const ticketId = text.replace('/start ticket_', '').trim();
+        if (ticketId && chatId) {
+          await kv.set(`ticket_author_${ticketId}`, chatId);
+          await sendMessage(chatId, 'Отлично! Я напишу сюда в личку, как только твою ссылку откроют и подпишут 💌');
+        }
+      } else if (text === '/start') {
+        await sendMessage(chatId, 'Привет! Я бот сервиса «БезШансов» 💌\\n\\nСоздавай интерактивные свидания на сайте и нажимай «Уведомить в Telegram» — я пришлю тебе сообщение, как только билет подпишут!');
       }
     }
     return res.status(200).send('OK');
