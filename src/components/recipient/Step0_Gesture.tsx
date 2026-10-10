@@ -243,11 +243,19 @@ export const Step0_Gesture: React.FC<Step0GestureProps> = ({
     ctx.font = '600 14px "Plus Jakarta Sans", sans-serif';
     ctx.fillStyle = '#FDE68A';
     ctx.textAlign = 'center';
-    ctx.fillText('✨ Сотри запотевшее стекло ✨', width / 2, height / 2 - 10);
+    ctx.fillText(
+      lang === 'en' ? '✨ Rub off the frosted glass ✨' : '✨ Сотри запотевшее стекло ✨',
+      width / 2,
+      height / 2 - 10
+    );
     ctx.font = '400 12px "Plus Jakarta Sans", sans-serif';
     ctx.fillStyle = '#A8A29E';
-    ctx.fillText('проведи пальцем или мышкой', width / 2, height / 2 + 15);
-  }, [gesture]);
+    ctx.fillText(
+      lang === 'en' ? 'swipe with your finger or pointer' : 'проведи пальцем или мышкой',
+      width / 2,
+      height / 2 + 15
+    );
+  }, [gesture, lang]);
 
   const handleScratch = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
