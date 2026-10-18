@@ -101,8 +101,10 @@ export function generateInvitationUrl(
   if (config.language) params.set('lang', config.language);
 
   const queryString = params.toString();
-  if (typeof window === 'undefined') return `?${queryString}`;
-  const origin = window.location.origin;
+  if (typeof window === 'undefined') return `https://bezshansov.ru/?${queryString}`;
+  const origin = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? window.location.origin
+    : 'https://bezshansov.ru';
   const pathname = window.location.pathname;
   return `${origin}${pathname}?${queryString}`;
 }
